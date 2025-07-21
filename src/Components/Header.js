@@ -1,5 +1,7 @@
 import React from "react";
 import { useAuth } from "../Context/AuthContext";
+import logo from "../images/logo.png"
+
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
@@ -11,6 +13,7 @@ logout();
   return (
     <header className="bg-gray-100 p-4 flex justify-between items-center">
       <div className="main-header">
+     <img src={logo} alt="" />
         <p className="text-center font-semibold">Header Coming Soon.. !</p>
       </div>
 

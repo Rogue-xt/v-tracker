@@ -1,62 +1,63 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../App.css";
+
 const Signup = () => {
-  // Form data stored as object
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     password: "",
-    userType: "customer",
   });
 
-  // To hold field-specific errors
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
-  // ✅ Basic validation logic
+  const { name, email, phone, password } = form;
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const validate = () => {
     const errs = {};
+    if (!name.trim()) errs.name = "Name is required";
+    if (!email.trim()) errs.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) errs.email = "Invalid email format";
 
-    if (!form.name.trim()) errs.name = "Name is required";
-    if (!form.email.trim()) errs.email = "Email is required";
-    else if (!/\S+@\S+\.\S+/.test(form.email))
-      errs.email = "Invalid email format";
+    if (!phone.trim()) errs.phone = "Phone is required";
+    else if (!/^\d{10}$/.test(phone)) errs.phone = "Phone must be 10 digits";
 
-    if (!form.phone.trim()) errs.phone = "Phone is required";
-    else if (!/^\d{10}$/.test(form.phone))
-      errs.phone = "Phone must be 10 digits";
-
-    if (!form.password.trim()) errs.password = "Password is required";
-    else if (form.password.length < 6)
+    if (!password.trim()) errs.password = "Password is required";
+    else if (password.length < 6)
       errs.password = "Minimum 6 characters required";
 
     return errs;
   };
 
-  // ✅ Form submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
     const validationErrors = validate();
     setErrors(validationErrors);
 
-    // If no errors, submit to backend
     if (Object.keys(validationErrors).length === 0) {
-      fetch("http://localhost:5000/api/signup", {
+      fetch("https://client-management-server.onrender.com/usersignup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       })
         .then((res) => res.json())
         .then((data) => {
-          alert(data.message || "Signup successful");
-          setForm({
-            name: "",
-            email: "",
-            phone: "",
-            password: "",
-            userType: "customer",
-          });
+          if (data.status === "success") {
+            alert("Signup successful!");
+            console.log("Signup successful");
+            console.log("Redirecting to login..."); 
+            navigate('/login')
+          } else {
+            alert(data.message || "Signup failed");
+             console.log("Failing"); 
+          }
         });
     }
   };
@@ -68,85 +69,68 @@ const Signup = () => {
     >
       <h2 className="text-xl font-bold mb-4">Sign Up</h2>
 
-      {/* Name */}
       <div className="auth-field mb-3">
         <label>Full Name</label>
         <input
+          name="name"
           type="text"
           className="w-full border p-2"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          value={name}
+          onChange={handleChange}
         />
-        {errors.name && (
-          <p className="auth-error text-red-500 text-sm">{errors.name}</p>
-        )}
+        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
       </div>
 
-      {/* Email */}
       <div className="auth-field mb-3">
         <label>Email</label>
         <input
+          name="email"
           type="email"
           className="w-full border p-2"
-          value={form.email}
-          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          value={email}
+          onChange={handleChange}
         />
-        {errors.email && (
-          <p className="auth-error text-red-500 text-sm">{errors.email}</p>
-        )}
+        {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
       </div>
 
-      {/* Phone */}
       <div className="auth-field mb-3">
         <label>Phone Number</label>
         <input
+          name="phone"
           type="tel"
           className="w-full border p-2"
-          value={form.phone}
-          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          value={phone}
+          onChange={handleChange}
         />
-        {errors.phone && (
-          <p className="auth-error text-red-500 text-sm">{errors.phone}</p>
-        )}
+        {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
       </div>
 
-      {/* Password */}
       <div className="auth-field mb-3">
         <label>Password</label>
         <input
+          name="password"
           type="password"
           className="w-full border p-2"
-          value={form.password}
-          onChange={(e) => setForm({ ...form, password: e.target.value })}
+          value={password}
+          onChange={handleChange}
         />
         {errors.password && (
-          <p className="auth-error text-red-500 text-sm">{errors.password}</p>
+          <p className="text-red-500 text-sm">{errors.password}</p>
         )}
       </div>
-
-      {/* User Type */}
-      <div className="auth-field mb-4">
-        <label>User Type</label>
-        <select
-          className="w-full border p-2"
-          value={form.userType}
-          onChange={(e) => setForm({ ...form, userType: e.target.value })}
+      <div className="btn-wrap">
+        <button
+          type="submit"
+          className="auth-button bg-green-600 text-white py-2 px-4 w-full rounded hover:bg-green-700"
         >
-          <option value="customer">Customer</option>
-          <option value="admin">Admin</option>
-        </select>
+          Create Account
+        </button>
       </div>
 
-      <button
-        type="submit"
-        className="auth-button bg-green-600 text-white py-2 px-4 w-full rounded hover:bg-green-700"
-      >
-        Create Account
-      </button>
       <p className="auth-switch mt-4 text-sm text-center">
-        Already have an account,{" "}
+        Already have an account?{" "}
         <Link
-          to="/"
+          to="/login"
           className="text-blue-600 underline hover:text-blue-800"
         >
           Login

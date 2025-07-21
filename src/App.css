@@ -3,7 +3,7 @@
 
 .auth-container {
   max-width: 400px;
-  margin: 50px auto;
+  margin: 10% auto;
   padding: 2rem;
   background-color: #ffffff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
@@ -31,7 +31,7 @@
 
 .auth-field input,
 .auth-field select {
-  width: 100%;
+  width: 95%;
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -50,9 +50,13 @@
   font-size: 0.85rem;
   margin-top: 0.3rem;
 }
-
+.btn-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .auth-button {
-  width: 100%;
+  width: auto;
   background-color: #0077ff;
   color: white;
   padding: 12px;
@@ -65,7 +69,7 @@
 }
 
 .auth-button:hover {
-  background-color: #005fcc;
+  background-color: #273F4F;
 }
 
 .auth-switch {
@@ -108,4 +112,41 @@ button.log-button {
 }
 button.log-button:hover {
     background-color: #005fcc;
+}
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 25px;
+}
+.main-header img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    filter: invert(1);
+}
+
+body {
+    background: #FE7743;
+}
+header {
+  color: #fff;
+  border-radius: 18px;
+  margin: 6px;
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3),
+            0 6px 6px rgba(0, 0, 0, 0.25);
+    /* border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px; */
+    filter: drop-shadow(2px 4px 6px black);
+    position: fixed;
+    width: 99%;
+    top: 0;
+    background-color: #273F4F;
+}
+p.text-sm {
+    margin: 0 12px;
+}
+@media(max-width:768px){
+  .auth-container {
+  margin: 30% auto;
+  }
 }
