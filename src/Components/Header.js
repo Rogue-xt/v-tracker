@@ -1,36 +1,56 @@
 import React from "react";
 import { useAuth } from "../Context/AuthContext";
-import logo from "../images/logo.png"
+import logo from "../images/logo.png";
 
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
   const handleLogout = () => {
-logout();
- 
+    logout();
   };
 
   return (
-    <header className="bg-gray-100 p-4 flex justify-between items-center">
-      <div className="main-header">
-     <img src={logo} alt="" />
-        <p className="text-center font-semibold">Header Coming Soon.. !</p>
-      </div>
-
-      {currentUser ? (
-        <div className="log text-sm text-right">
-          <p>
-            <strong>{currentUser.name} </strong>Logged in as:
-            <strong>{currentUser.userType}</strong>
-            <button onClick={handleLogout} className="log-button">
-              Logout
-            </button>
-          </p>
-        </div>
-      ) : (
-        <p className="text-sm"></p>
-      )}
-    </header>
+    <Navbar collapseOnSelect expand="lg" className="header bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="/">
+          {" "}
+          <img src={logo} alt="" />
+          V-Tracker
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            {currentUser ? (
+              <NavDropdown
+                title={`Hello, ${currentUser.name}`}
+                id="collapsible-nav-dropdown"
+              >
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                {/* <NavDropdown.Item href="#action/3.2">
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">
+                  Something
+                </NavDropdown.Item> */}
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={handleLogout}>
+                  Logout
+                </NavDropdown.Item>
+              </NavDropdown>
+            ) : (
+              <p></p>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  
   );
 };
 

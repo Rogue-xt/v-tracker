@@ -3,32 +3,34 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
-  const { onLogin } = useAuth();
+  const { login } = useAuth();
     const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
+    if (!username || !password) {
       alert("Please fill in both email and password.");
       return;
     }
-
+// console.log(username);
     fetch("https://client-management-server.onrender.com/userlogin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }), // use email key here to match backend
+      body: JSON.stringify({ username, password }), // use email key here to match backend
     })
       .then((res) => res.json())
       .then((data) => {
         console.log("Login response:", data); // Debug server response
 
-        if (data.success) {
-          onLogin(data.user);
-          navigate("/");
+        if (data.status) {
+          login(data.user, data.token); // Save to context & localStorage
+            console.log("navigating to /"); 
+          navigate("/"); 
+          console.log('working');
         } else {
           alert(data.message || "Login failed. Please check your credentials.");
         }
@@ -51,7 +53,7 @@ const Login = () => {
         <input
           type="email"
           className="w-full border p-2"
-          value={email}
+          value={username}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
