@@ -5,6 +5,9 @@ import { useAuth } from "../Context/AuthContext";
 function Clientform() {
   const [errors, setErrors] = useState({});
   const [clients, setClients] = useState([]);
+  const [selectedTab, setSelectedTab] = useState("all");
+  console.log(clients);
+
   const { currentUser, token } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -74,7 +77,7 @@ function Clientform() {
         payload,
         {
           headers: {
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -89,7 +92,6 @@ function Clientform() {
         packageName: "",
         packageDuration: 0,
       });
-      
     } catch (error) {
       console.error("Error submitting data:", error);
       alert("Submission failed.");
@@ -98,22 +100,44 @@ function Clientform() {
 
   useEffect(() => {
     const fetchClients = async () => {
+      // try {
+      //   const res = await axios.get(
+      //     "https://client-management-server.onrender.com/getclients",
+      //     {
+      //       headers: {
+      //         Authorization: `Bearer ${token}`, // ✅ Send JWT in headers
+      //       },
+      //     }
+      //   );
+      //   setClients(res.data.clients);
+
       try {
-        const res = await axios.get(
-          "https://client-management-server.onrender.com/getclients",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // ✅ Send JWT in headers
-            },
-          }
-        );
-        setClients(res.data.clients);
+        let url = "";
+
+        if (selectedTab === "all") {
+          url = "https://client-management-server.onrender.com/getclients";
+        } else if (selectedTab === "active") {
+          url =
+            "https://client-management-server.onrender.com/clients/status/active";
+        } else if (selectedTab === "inactive") {
+          url =
+            "https://client-management-server.onrender.com/clients/status/inactive";
+        }
+
+        const res = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response", res);
+
+        setClients(res.data.clients || []);
       } catch (err) {
         console.error("Error fetching clients:", err);
       }
     };
     fetchClients();
-  }, [token]);
+  }, [token, formData, selectedTab]);
   return (
     <>
       <div className="infoWrapper">
@@ -189,28 +213,84 @@ function Clientform() {
           </form>
         </div>
         <div className="displayContainer">
-          <div className="displayBox">
- 
+          <div className="displayWrapper">
+            <div
+              className="tabContainer"
+              style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+            >
+              <button
+                className={selectedTab === "all" ? "activeTab" : ""}
+                onClick={() => setSelectedTab("all")}
+              >
+                All Users
+              </button>
+              <button
+                className={selectedTab === "active" ? "activeTab" : ""}
+                onClick={() => setSelectedTab("active")}
+              >
+                Active Users
+              </button>
+              <button
+                className={selectedTab === "inactive" ? "activeTab" : ""}
+                onClick={() => setSelectedTab("inactive")}
+              >
+                Inactive Users
+              </button>
+            </div>
+            <div className="displayBox">
               {clients.length === 0 ? (
                 <p>No clients found.</p>
               ) : (
-                <div className="displayBox2" style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+                <div
+                  className="displayBox2"
+                  style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
+                >
                   {clients.map((client) => (
-                    <div className="individualBox"
-                      key={client._id}
-                    >
-                      <h3>{client.name}</h3>
-                      <p>
-                        <strong>Email:</strong> {client.email}
-                      </p>
-                      <p>
-                        <strong>Phone:</strong> {client.phone}
-                      </p>
+                    <div className="individualBox" key={client._id}>
+                      <div className="detailsFlex">
+                        <div className="details1">
+                          <div className="nameHead">
+                            <h3>{client.name}</h3>
+
+                            <div
+                              className={
+                                client.packageStatus.isActive === true
+                                  ? "green"
+                                  : "red"
+                              }
+                            ></div>
+                          </div>
+                          <p>
+                            <strong>Email:</strong> {client.email}
+                          </p>
+                          <p>
+                            <strong>Phone:</strong> {client.phone}
+                          </p>
+                          <p>
+                            <strong>Package:</strong> {client.packageName}
+                          </p>
+
+                          <p>
+                            <strong>Admission Date:</strong>
+                            {client.createdAt}
+                          </p>
+                          <p>
+                            <strong>Expiry Date:</strong>
+                            {client.packageStatus.expiryDate}
+                          </p>
+                        </div>
+                        <div className="details2">
+                          <p>
+                            <strong>Days Remaining:</strong>
+                            {client.packageStatus.daysRemaining}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
               )}
-           
+            </div>
           </div>
         </div>
       </div>

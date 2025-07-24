@@ -5,7 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Header from"./Components/Header"
+import Header from "./Components/Header";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
@@ -20,7 +20,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Header/>
+        <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -31,7 +31,7 @@ function App() {
             element={
               <PrivateRoute>
                 <Homepage />
-               </PrivateRoute>
+              </PrivateRoute>
             }
           />
         </Routes>

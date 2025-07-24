@@ -4,7 +4,7 @@ import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
   const { login } = useAuth();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,21 +16,21 @@ const Login = () => {
       alert("Please fill in both email and password.");
       return;
     }
-// console.log(username);
+    // console.log(username);
     fetch("https://client-management-server.onrender.com/userlogin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }), // use email key here to match backend
+      body: JSON.stringify({ username, password }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Login response:", data); // Debug server response
+        // console.log("Login response:", data);
 
         if (data.status) {
-          login(data.user, data.token); // Save to context & localStorage
-            console.log("navigating to /"); 
-          navigate("/"); 
-          console.log('working');
+          login(data.user, data.token);
+          console.log("navigating to /");
+          navigate("/");
+          console.log("working");
         } else {
           alert(data.message || "Login failed. Please check your credentials.");
         }

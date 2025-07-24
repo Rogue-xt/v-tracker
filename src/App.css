@@ -1,12 +1,26 @@
-/* === Auth Form Styles === */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
 
+body {
+  font-family: 'Fira Code', monospace !important;
+   background-image: url("../public/bagroundImage.webp");
+  background-attachment: fixed;
+}
+.displayBox::-webkit-scrollbar {
+    width: 7px;
+}
+form.auth-container {
+  backdrop-filter: blur(20px);
+  background: transparent !important;
+  border: 1px solid #fff;
+  color: #fff;
+}
 .auth-container {
   max-width: 400px;
   margin: 10% auto;
   padding: 2rem;
   background-color: #ffffff;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
+  border-radius: 7px;
   font-family: "Segoe UI", sans-serif;
 }
 
@@ -14,7 +28,7 @@
   text-align: center;
   margin-bottom: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: #fff;
 }
 
 .auth-field {
@@ -24,7 +38,7 @@
 .auth-field label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #444;
+  color: #fff;
   font-size: 0.95rem;
 }
 
@@ -33,9 +47,11 @@
   width: 95%;
   padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 7px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
+  background: transparent;
+  color: #fff;
 }
 
 .auth-field input:focus,
@@ -56,19 +72,21 @@
 }
 .auth-button {
   width: auto;
-  background-color: #0077ff;
+  background: transparent;
   color: white;
   padding: 12px;
   font-size: 1rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
+  border: 1px solid #fff;
   cursor: pointer;
   margin-top: 1rem;
   transition: background-color 0.3s ease;
 }
 
 .auth-button:hover {
-  background-color: #273f4f;
+  background: #4a5464;
+  color: #fff;
 }
 
 .auth-switch {
@@ -78,9 +96,9 @@
 }
 
 .auth-switch a {
-  color: #0077ff;
+  color: aqua;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .auth-switch a:hover {
@@ -91,55 +109,42 @@
   height: auto;
   object-fit: contain;
 }
-/* .home-div{
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-} */
 button.log-button {
   margin-left: 7px;
-  background-color: #0077ff;
+  background: #4a5464;
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 button.log-button:hover {
-  background-color: #005fcc;
+  background: #4a5464;
+  color: #fff;
 }
 
-body {
-  background-image: url('../public/bagroundImage.webp');
-  background-attachment: fixed;
-  
-}
 nav.header a {
   color: #fff !important;
 }
 .navbar-expand-lg .navbar-nav .dropdown-menu {
-    backdrop-filter: blur(20px);
-    background: transparent;
-    border: 1px solid #fff;
-}.dropdown-item {
-    background-color: transparent !important;
+  backdrop-filter: blur(20px);
+  background: #4a5464;
+  border: 1px solid #fff;
+}
+.dropdown-item {
+  background-color: transparent !important;
 }
 .dropdown-divider {
-    border-top: 1px solid #ffffff !important;
-  
+  border-top: 1px solid #ffffff !important;
 }
 nav.header {
   border-radius: 18px;
   margin: 6px;
-  /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 6px 6px rgba(0, 0, 0, 0.25); */
-  /* position: fixed; */
   top: 0;
   backdrop-filter: blur(20px);
   border: 1px solid #fff;
   z-index: 999;
-background: transparent !important;
+  background: transparent !important;
 }
 p.text-sm {
   margin: 0 12px;
@@ -151,38 +156,45 @@ p.text-sm {
   padding-top: 5%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
 }
-.Form input, .Form select {
-
-    background: transparent;
-    color: #fff;
+.Form input,
+.Form select {
+  background: transparent;
+  color: #fff;
 }
-/* .Form {
-  background: #f5f7fa;
-  background-image: url('../public/bagroundImage.webp');
+.Form {
+  filter: drop-shadow(0px 2px 4px black);
+  background: transparent;
   padding: 30px 40px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   width: auto;
-  min-height: 520px;
-} */
-.Form {
-    background: transparent;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: auto;
-    min-height: 520px;
-    color: #fff;
-    background-size: cover;
-    background-position: left;
-    border: 1px solid;
-    backdrop-filter: blur(20px);
+  color: #fff;
+  background-size: cover;
+  background-position: left;
+  border: 1px solid;
+  backdrop-filter: blur(20px);
+}
+.displayContainer {
+  width: 60%;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  border: 1px solid;
+  overflow: hidden;
+}
+.Form,
+.displayContainer {
+  min-height: 75vh;
+  max-height: 75vh;
 }
 .formContainer {
-  padding: 40px;
-  width: 35%;
+  width: 30%;
 }
 .formDiv {
   display: flex;
@@ -195,7 +207,7 @@ p.text-sm {
 .Form input {
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 7px;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s;
@@ -206,50 +218,37 @@ p.text-sm {
 }
 .buttDiv button {
   padding: 7px 15px;
-  border-radius: 5px;
+  border-radius: 7px;
   border: 1px solid #ccc;
   font-size: 18px;
-  background-color: #0077ff;
+  background: transparent;
   cursor: pointer;
   color: #fff;
 }
 .buttDiv button:hover {
-  background: transparent;
+  background: #4a5464;
+  color: #fff;
   filter: drop-shadow(2px 4px 6px black);
-  color: #000;
 }
-.displayContainer {
-  padding: 40px;
-  width: 50%;
-}
+
 .displayBox {
-    min-height: 520px;
-    max-height: 520px;
-    width: auto;
-    overflow-y: auto;
-    border-radius: 12px;
-    padding: 30px 40px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    background-position: center;
-    background-size: cover;
-    color: #fff;
-    border: 1px solid;
-}
-/* .displayBox {
-   background-image: url(http://localhost:3006/static/media/bagroundImage.fe096ff01e6ee2f757f1.webp);
   min-height: 520px;
   max-height: 520px;
   width: auto;
-  overflow-y: auto;
-  border-radius: 12px;
-  background: #f5f7fa;
-  padding: 30px 40px;
+  overflow-y: scroll;
+  border-radius: 7px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-} */
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+   /* scrollbar-width: thin; */
+  /* scrollbar-color: #c014b5 #ffffff04; */
+}
+
 .Form select {
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 7px;
   font-size: 14px;
   outline: none;
   transition: border-color 0.2s;
@@ -263,7 +262,7 @@ p.text-sm {
 
 .clientCard {
   background: #f5f5f5;
-  border-radius: 8px;
+  border-radius: 7px;
   padding: 16px;
   width: 220px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -275,18 +274,80 @@ p.text-sm {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 .individualBox {
-    border: 1px solid #6b5b95;
-    border-radius: 8px;
-    padding: 16px;
-    width: 100%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      backdrop-filter: blur(10px);   
+  border: 1px solid #fff;
+  border-radius: 7px;
+  padding: 16px;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20px);
+  margin-top: 2px;
+  text-align: left;
+}
+.tabContainer button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  padding: 5px 7px;
+  font-size: 18px;
+  backdrop-filter: blur(20px);
 }
 .individualBox h3 {
-    text-transform: uppercase;
-    color: #fe7743;
-    font-weight: 700;
-    filter: drop-shadow(2px 1px 1px black);
+  text-transform: uppercase;
+  color: #fe7743;
+  font-weight: 700;
+  filter: drop-shadow(2px 1px 1px black);
+}
+.activeTab {
+  background-color: #4a5464 !important;
+  color: #f8f9fa !important;
+}
+.displayWrapper {
+  max-height: 70vh;
+  overflow: hidden;
+}
+.displayBox2 {
+  margin-bottom: 5%;
+}
+.nameHead {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: max-content;
+  border: 1px dotted;
+  padding: 1px 7px;
+  border-radius: 7px;
+}
+.nameHead h3 {
+  margin: 0;
+}
+.individualBox .nameHead div {
+  width: 25px;
+
+  height: 25px;
+}
+.red {
+  background-image: url("../public/face.png");
+  background-size: cover;
+}
+.green {
+  background-image: url("../public/smiling-face.png");
+  background-size: cover;
+}
+.detailsFlex {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.details2 p {
+    font-size: 2rem;
+    letter-spacing: 10px;
+    font-family: monospace;
+    filter: drop-shadow(2px 4px 6px black);
+}
+.details2  {
+    margin-right: 10%;
 }
 @media (max-width: 768px) {
   .formContainer,
@@ -299,4 +360,42 @@ p.text-sm {
   .header img {
     width: 30px;
   }
+  .infoWrapper {
+    margin: 20px;
+    gap: 30px;
+  }
+  .displayContainer {
+    padding: 30px 15px;
+    backdrop-filter: blur(20px);
+  }
+  .tabContainer button {
+    padding: 5px 6px;
+  }
+  .displayBox2 {
+    margin-bottom: 35%;
+  }
+  .navbar-toggler-icon {
+    filter: brightness(0) invert(1);
+  }
+  body {
+    background-position: center;
+  }
+  button{
+    font-size: 13px !important;
+  }
+  .details2 p {
+    font-size: 1rem;
+    letter-spacing: 1px;
+
+}
+.detailsFlex {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.nameHead {
+    width: 100%;
+    justify-content: center;
+}
 }

@@ -52,11 +52,11 @@ const Signup = () => {
           if (data.status === "success") {
             alert("Signup successful!");
             console.log("Signup successful");
-            console.log("Redirecting to login..."); 
-            navigate('/login')
+            console.log("Redirecting to login...");
+            navigate("/login");
           } else {
             alert(data.message || "Signup failed");
-             console.log("Failing"); 
+            console.log("Failing");
           }
         });
     }
