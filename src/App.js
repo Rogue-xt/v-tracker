@@ -12,7 +12,10 @@ import Homepage from "./pages/Homepage";
 import { AuthProvider, useAuth } from "./Context/AuthContext";
 
 const PrivateRoute = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, loading } = useAuth(); // make sure `loading` is implemented in context
+
+  if (loading) return <div>Loading...</div>;
+
   return currentUser ? children : <Navigate to="/login" />;
 };
 

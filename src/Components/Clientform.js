@@ -6,6 +6,8 @@ function Clientform() {
   const [errors, setErrors] = useState({});
   const [clients, setClients] = useState([]);
   const [selectedTab, setSelectedTab] = useState("all");
+  const [searchText, setSearchText] = useState("");
+
   console.log(clients);
 
   const { currentUser, token } = useAuth();
@@ -100,16 +102,6 @@ function Clientform() {
 
   useEffect(() => {
     const fetchClients = async () => {
-      // try {
-      //   const res = await axios.get(
-      //     "https://client-management-server.onrender.com/getclients",
-      //     {
-      //       headers: {
-      //         Authorization: `Bearer ${token}`, // ✅ Send JWT in headers
-      //       },
-      //     }
-      //   );
-      //   setClients(res.data.clients);
 
       try {
         let url = "";
@@ -138,164 +130,210 @@ function Clientform() {
     };
     fetchClients();
   }, [token, formData, selectedTab]);
-  return (
-    <>
-      <div className="infoWrapper">
-        <div className="formContainer">
-          <form className="Form" onSubmit={handleSubmit}>
-            <div className="formDiv">
-              <h2>ADD USER</h2>
-            </div>
 
-            <div className="formDiv">
-              <label>Name</label>
-              <input
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-              {errors.name && (
-                <p className="text-red-500 text-sm">{errors.name}</p>
-              )}
-            </div>
+  // filtering client
+    const filteredClients = clients.filter((client) => {
+      const text = searchText.toLowerCase();
+      return (
+        client.name.toLowerCase().includes(text) ||
+        client.email.toLowerCase().includes(text) ||
+        client.phone.includes(text)
+      );
+    });
 
-            <div className="formDiv">
-              <label>Phone</label>
-              <input
-                name="phone"
-                type="text"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-              {errors.phone && (
-                <p className="text-red-500 text-sm">{errors.phone}</p>
-              )}
-            </div>
+    //Delete client
 
-            <div className="formDiv">
-              <label>Email</label>
-              <input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email}</p>
-              )}
-            </div>
+ const handleDelete = async (id) => {
+   try {
+     const response = await axios.delete(
+       `https://client-management-server.onrender.com/clients/deleteclient/${id}`
+     );
+     if (response.status === 200) {
+       alert("Client deleted successfully");
 
-            <div className="formDiv">
-              <label>Package</label>
-              <select
-                name="packageName"
-                value={formData.packageName}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select a package</option>
-                <option value="Premium">Premium ($1500, 3 months)</option>
-                <option value="Classic">Classic ($1000, 2 months)</option>
-                <option value="Local">Local ($700, 1 month)</option>
-              </select>
-              {errors.packageName && (
-                <p className="text-red-500 text-sm">{errors.packageName}</p>
-              )}
-            </div>
+       setClients((prevClients) =>
+         prevClients.filter((client) => client._id !== id)
+       );
+     }
+   } catch (error) {
+     console.error("Error deleting client:", error);
+     alert("Failed to delete client");
+   }
+ };
+   
+     return (
+       <>
+         <div className="infoWrapper">
+           <div className="formContainer">
+             <form className="Form" onSubmit={handleSubmit}>
+               <div className="formDiv">
+                 <h2>ADD USER</h2>
+               </div>
 
-            <div className="buttDiv">
-              <button type="submit">Submit</button>
-            </div>
-          </form>
-        </div>
-        <div className="displayContainer">
-          <div className="displayWrapper">
-            <div
-              className="tabContainer"
-              style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-            >
-              <button
-                className={selectedTab === "all" ? "activeTab" : ""}
-                onClick={() => setSelectedTab("all")}
-              >
-                All Users
-              </button>
-              <button
-                className={selectedTab === "active" ? "activeTab" : ""}
-                onClick={() => setSelectedTab("active")}
-              >
-                Active Users
-              </button>
-              <button
-                className={selectedTab === "inactive" ? "activeTab" : ""}
-                onClick={() => setSelectedTab("inactive")}
-              >
-                Inactive Users
-              </button>
-            </div>
-            <div className="displayBox">
-              {clients.length === 0 ? (
-                <p>No clients found.</p>
-              ) : (
-                <div
-                  className="displayBox2"
-                  style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
-                >
-                  {clients.map((client) => (
-                    <div className="individualBox" key={client._id}>
-                      <div className="detailsFlex">
-                        <div className="details1">
-                          <div className="nameHead">
-                            <h3>{client.name}</h3>
+               <div className="formDiv">
+                 <label>Name</label>
+                 <input
+                   name="name"
+                   type="text"
+                   value={formData.name}
+                   onChange={handleChange}
+                   required
+                 />
+                 {errors.name && (
+                   <p className="text-red-500 text-sm">{errors.name}</p>
+                 )}
+               </div>
 
-                            <div
-                              className={
-                                client.packageStatus.isActive === true
-                                  ? "green"
-                                  : "red"
-                              }
-                            ></div>
-                          </div>
-                          <p>
-                            <strong>Email:</strong> {client.email}
-                          </p>
-                          <p>
-                            <strong>Phone:</strong> {client.phone}
-                          </p>
-                          <p>
-                            <strong>Package:</strong> {client.packageName}
-                          </p>
+               <div className="formDiv">
+                 <label>Phone</label>
+                 <input
+                   name="phone"
+                   type="text"
+                   value={formData.phone}
+                   onChange={handleChange}
+                   required
+                 />
+                 {errors.phone && (
+                   <p className="text-red-500 text-sm">{errors.phone}</p>
+                 )}
+               </div>
 
-                          <p>
-                            <strong>Admission Date:</strong>
-                            {client.createdAt}
-                          </p>
-                          <p>
-                            <strong>Expiry Date:</strong>
-                            {client.packageStatus.expiryDate}
-                          </p>
-                        </div>
-                        <div className="details2">
-                          <p>
-                            <strong>Days Remaining:</strong>
-                            {client.packageStatus.daysRemaining}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+               <div className="formDiv">
+                 <label>Email</label>
+                 <input
+                   name="email"
+                   type="email"
+                   value={formData.email}
+                   onChange={handleChange}
+                   required
+                 />
+                 {errors.email && (
+                   <p className="text-red-500 text-sm">{errors.email}</p>
+                 )}
+               </div>
+
+               <div className="formDiv">
+                 <label>Package</label>
+                 <select
+                   name="packageName"
+                   value={formData.packageName}
+                   onChange={handleChange}
+                   required
+                 >
+                   <option value="">Select a package</option>
+                   <option value="Premium">Premium ($1500, 3 months)</option>
+                   <option value="Classic">Classic ($1000, 2 months)</option>
+                   <option value="Local">Local ($700, 1 month)</option>
+                 </select>
+                 {errors.packageName && (
+                   <p className="text-red-500 text-sm">{errors.packageName}</p>
+                 )}
+               </div>
+
+               <div className="buttDiv">
+                 <button type="submit">Submit</button>
+               </div>
+             </form>
+           </div>
+           <div className="displayContainer">
+             <div className="displayWrapper">
+               <div
+                 className="tabContainer"
+                 style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+               >
+                 <button
+                   className={selectedTab === "all" ? "activeTab" : ""}
+                   onClick={() => setSelectedTab("all")}
+                 >
+                   All Users
+                 </button>
+                 <button
+                   className={selectedTab === "active" ? "activeTab" : ""}
+                   onClick={() => setSelectedTab("active")}
+                 >
+                   Active Users
+                 </button>
+                 <button
+                   className={selectedTab === "inactive" ? "activeTab" : ""}
+                   onClick={() => setSelectedTab("inactive")}
+                 >
+                   Inactive Users
+                 </button>
+                 <div className="searchBox">
+                   <input
+                     type="text"
+                     placeholder="Search by name, email, or phone"
+                     value={searchText}
+                     onChange={(e) => setSearchText(e.target.value)}
+                   />
+                 </div>
+               </div>
+               <div className="displayBox">
+                 {filteredClients.length === 0 ? (
+                   <p>No clients found.</p>
+                 ) : (
+                   <div
+                     className="displayBox2"
+                     style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
+                   >
+                     {filteredClients.map((client) => (
+                       <div className="individualBox" key={client._id}>
+                         <div className="nameHead">
+                           <div className="dflex">
+                             <h3>{client.name}</h3>
+                             <div
+                               className={
+                                 client.packageStatus.isActive === true
+                                   ? "green"
+                                   : "red"
+                               }
+                             ></div>
+                           </div>
+                           <div className="dflex">
+                             <button onClick={() => handleDelete(client._id)}>
+                               Delete
+                             </button>
+                           </div>
+                         </div>
+                         <div className="detailsFlex">
+                           <div className="details1">
+                             <p>
+                               <strong>Email:</strong> {client.email}
+                             </p>
+                             <p>
+                               <strong>Phone:</strong> {client.phone}
+                             </p>
+                             <p>
+                               <strong>Package:</strong> {client.packageName}
+                             </p>
+
+                             <p>
+                               <strong>Admission Date:</strong>
+                               {client.createdAt}
+                             </p>
+                             <p>
+                               <strong>Expiry Date:</strong>
+                               {client.packageStatus.expiryDate}
+                             </p>
+                           </div>
+                           <div className="details2">
+                             <p>
+                               <strong>
+                                 Days Remaining:{client.packageStatus.daysRemaining}
+                               </strong>
+                             </p>
+                           </div>
+                         </div>
+                       </div>
+                     ))}
+                   </div>
+                 )}
+               </div>
+             </div>
+           </div>
+         </div>
+       </>
+     );
 }
 
 export default Clientform;

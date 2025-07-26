@@ -1,12 +1,33 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&display=swap");
 
 body {
-  font-family: 'Fira Code', monospace !important;
-   background-image: url("../public/bagroundImage.webp");
+  font-family: "Fira Code", monospace !important;
+  /* background-image: url("../public/bagroundImage.webp"); */
+  /* background-color: beige; */
+  background-color: #f0f0e2 !important;
   background-attachment: fixed;
 }
+nav.header a,.tabContainer button,.formDiv h2,.formDiv label,.Form input, .Form select,.buttDiv button,.individualBox {
+  color: #000 !important;
+}
+.searchBox input,.Form,
+form.auth-container,
+.auth-field input,
+.auth-field select,
+.auth-button,
+.navbar-expand-lg .navbar-nav .dropdown-menu,
+nav.header,
+.displayContainer,
+.Form input,
+.buttDiv button,
+.Form select,
+.individualBox,
+.tabContainer button,.dropdown-divider {
+  border:2px dashed #000 !important;
+}
+
 .displayBox::-webkit-scrollbar {
-    width: 7px;
+  width: 7px;
 }
 form.auth-container {
   backdrop-filter: blur(20px);
@@ -56,7 +77,7 @@ form.auth-container {
 
 .auth-field input:focus,
 .auth-field select:focus {
-  border-color: #0077ff;
+  /* border-color: #0077ff; */
   outline: none;
 }
 
@@ -76,7 +97,6 @@ form.auth-container {
   color: white;
   padding: 12px;
   font-size: 1rem;
-  border: none;
   border-radius: 7px;
   border: 1px solid #fff;
   cursor: pointer;
@@ -123,19 +143,17 @@ button.log-button:hover {
   color: #fff;
 }
 
-nav.header a {
-  color: #fff !important;
-}
+
 .navbar-expand-lg .navbar-nav .dropdown-menu {
   backdrop-filter: blur(20px);
-  background: #4a5464;
+  background: #f0f0e2;
   border: 1px solid #fff;
 }
 .dropdown-item {
   background-color: transparent !important;
 }
 .dropdown-divider {
-  border-top: 1px solid #ffffff !important;
+  border-top: 1px solid #ffffff;
 }
 nav.header {
   border-radius: 18px;
@@ -165,7 +183,7 @@ p.text-sm {
   color: #fff;
 }
 .Form {
-  filter: drop-shadow(0px 2px 4px black);
+  /* filter: drop-shadow(0px 2px 4px black); */
   background: transparent;
   padding: 30px 40px;
   border-radius: 12px;
@@ -228,7 +246,7 @@ p.text-sm {
 .buttDiv button:hover {
   background: #4a5464;
   color: #fff;
-  filter: drop-shadow(2px 4px 6px black);
+  /* filter: drop-shadow(2px 4px 6px black); */
 }
 
 .displayBox {
@@ -241,7 +259,7 @@ p.text-sm {
   background-position: center;
   background-size: cover;
   color: #fff;
-   /* scrollbar-width: thin; */
+  /* scrollbar-width: thin; */
   /* scrollbar-color: #c014b5 #ffffff04; */
 }
 
@@ -296,11 +314,11 @@ p.text-sm {
   text-transform: uppercase;
   color: #fe7743;
   font-weight: 700;
-  filter: drop-shadow(2px 1px 1px black);
+  /* filter: drop-shadow(2px 1px 1px black); */
 }
-.activeTab {
+.tabContainer .activeTab {
   background-color: #4a5464 !important;
-  color: #f8f9fa !important;
+  color: #fff !important;
 }
 .displayWrapper {
   max-height: 70vh;
@@ -311,19 +329,33 @@ p.text-sm {
 }
 .nameHead {
   display: flex;
+  justify-content: space-between;
+  width: 100%;
   align-items: center;
   gap: 15px;
-  width: max-content;
-  border: 1px dotted;
+  /* width: max-content; */
   padding: 1px 7px;
   border-radius: 7px;
 }
 .nameHead h3 {
   margin: 0;
 }
-.individualBox .nameHead div {
+.dflex {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.dflex button {
+    background: transparent;
+    color: #000;
+    border: 1px dashed #000;
+    padding: 5px 7px;
+    font-size: 18px;
+    backdrop-filter: blur(20px);
+    border-radius: 7px;
+}
+.individualBox .nameHead .dflex div{
   width: 25px;
-
   height: 25px;
 }
 .red {
@@ -335,19 +367,32 @@ p.text-sm {
   background-size: cover;
 }
 .detailsFlex {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 .details2 p {
-    font-size: 2rem;
-    letter-spacing: 10px;
-    font-family: monospace;
-    filter: drop-shadow(2px 4px 6px black);
+  font-size: 2rem;
+  letter-spacing: 5px;
+  font-family: monospace;
+  /* filter: drop-shadow(2px 4px 6px black); */
 }
-.details2  {
-    margin-right: 10%;
+.details2 {
+  margin-right: 10%;
+}
+.searchBox input:focus-visible,
+.searchBox:focus-visible {
+  outline: none !important;
+}
+.searchBox input {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 7px;
+  padding: 5px 7px;
+  font-size: 18px;
+  backdrop-filter: blur(20px);
 }
 @media (max-width: 768px) {
   .formContainer,
@@ -380,22 +425,21 @@ p.text-sm {
   body {
     background-position: center;
   }
-  button{
+  button {
     font-size: 13px !important;
   }
   .details2 p {
     font-size: 1rem;
     letter-spacing: 1px;
-
-}
-.detailsFlex {
+  }
+  .detailsFlex {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-}
-.nameHead {
+  }
+  .nameHead {
     width: 100%;
     justify-content: center;
-}
+  }
 }
