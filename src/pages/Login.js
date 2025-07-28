@@ -73,7 +73,7 @@ const Login = () => {
       <div className="btn-wrap">
         <button
           type="submit"
-          className="auth-button bg-blue-600 text-white py-2 px-4 w-full rounded hover:bg-blue-700"
+          className="auth-button  py-2 px-4 w-full rounded hover:bg-blue-700"
         >
           Login
         </button>
