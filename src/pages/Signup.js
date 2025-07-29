@@ -42,7 +42,7 @@ const Signup = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      fetch("https://client-management-server.onrender.com/usersignup", {
+      fetch("https://client-management-server-ten.vercel.app/usersignup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

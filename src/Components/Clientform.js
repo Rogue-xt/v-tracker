@@ -1,12 +1,17 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../Context/AuthContext";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 function Clientform() {
   const [errors, setErrors] = useState({});
   const [clients, setClients] = useState([]);
   const [selectedTab, setSelectedTab] = useState("all");
   const [searchText, setSearchText] = useState("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editClientData, setEditClientData] = useState(null);
 
   // console.log(clients);
 
@@ -75,7 +80,7 @@ function Clientform() {
       };
 
       const response = await axios.post(
-        "https://client-management-server.onrender.com/addclient",
+        "https://client-management-server-ten.vercel.app/addclient",
         payload,
         {
           headers: {
@@ -106,13 +111,13 @@ function Clientform() {
         let url = "";
 
         if (selectedTab === "all") {
-          url = "https://client-management-server.onrender.com/getclients";
+          url = "https://client-management-server-ten.vercel.app/getclients";
         } else if (selectedTab === "active") {
           url =
-            "https://client-management-server.onrender.com/clients/status/active";
+            "https://client-management-server-ten.vercel.app/clients/status/active";
         } else if (selectedTab === "inactive") {
           url =
-            "https://client-management-server.onrender.com/clients/status/inactive";
+            "https://client-management-server-ten.vercel.app/clients/status/inactive";
         }
 
         const res = await axios.get(url, {
@@ -147,7 +152,7 @@ function Clientform() {
     // console.log("token is",token);
     try {
       const response = await axios.delete(
-        `https://client-management-server.onrender.com/deleteclient/${id}`,
+        `https://client-management-server-ten.vercel.app/deleteclient/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -165,6 +170,55 @@ function Clientform() {
       console.error("Error deleting client:", error);
       console.log("Error response:", error.response);
       alert("Failed to delete client");
+    }
+  };
+
+  //Edit client
+
+  const openEditModal = (client) => {
+    setEditClientData(client);
+    setIsEditModalOpen(true);
+    console.log("editmodal open:", isEditModalOpen);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditClientData((prev) => ({ ...prev, [name]: value }));
+    console.log(editClientData);
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `https://client-management-server-ten.vercel.app/client/updateclient/${editClientData._id}`,
+        editClientData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("edit response:",response.data);
+
+      if (response.data.status === "success") {
+        alert("Client updated successfully");
+
+        // Update in local state
+        setClients((prev) =>
+          prev.map((client) =>
+            client._id === editClientData._id
+              ? response.data.updatedClient
+              : client
+          )
+        );
+
+        setIsEditModalOpen(false);
+        setEditClientData(null);
+      }
+    } catch (err) {
+      console.error("Update error:", err);
+      alert("Failed to update client");
     }
   };
 
@@ -298,7 +352,10 @@ function Clientform() {
                         </div>
                         <div className="dflex">
                           <button onClick={() => handleDelete(client._id)}>
-                            Delete
+                            <FontAwesomeIcon icon={faTrashCan} />
+                          </button>
+                          <button onClick={() => openEditModal(client)}>
+                            <FontAwesomeIcon icon={faPenToSquare} />
                           </button>
                         </div>
                       </div>
@@ -338,6 +395,56 @@ function Clientform() {
               )}
             </div>
           </div>
+        </div>
+        <div className="Mymodal">
+          {isEditModalOpen && editClientData && (
+            <div
+              className="modal"
+              style={{ display: isEditModalOpen ? "flex" : "none" }}
+            >
+              <div className="modal-content">
+                <h2>Edit Client</h2>
+                <form onSubmit={handleEditSubmit}>
+                  <label>Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={editClientData.email}
+                    onChange={handleEditChange}
+                  />
+
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={editClientData.phone}
+                    onChange={handleEditChange}
+                  />
+
+                  <label>Package</label>
+                  <select
+                    name="packageName"
+                    value={editClientData.packageName}
+                    onChange={handleEditChange}
+                  >
+                    <option value="Premium">Premium</option>
+                    <option value="Classic">Classic</option>
+                    <option value="Local">Local</option>
+                  </select>
+
+                  <div className="edit-btn" style={{ marginTop: "10px" }}>
+                    <button type="submit">Update</button>
+                    <button
+                      type="button"
+                      onClick={() => setIsEditModalOpen(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
