@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import Homepage from "./pages/Homepage";
 import { AuthProvider, useAuth } from "./Context/AuthContext";
 
+
 const PrivateRoute = ({ children }) => {
   const { currentUser, loading } = useAuth(); // make sure `loading` is implemented in context
 

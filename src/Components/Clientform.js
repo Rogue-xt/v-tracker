@@ -12,6 +12,8 @@ function Clientform() {
   const [searchText, setSearchText] = useState("");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editClientData, setEditClientData] = useState(null);
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
+
 
   // console.log(clients);
 
@@ -125,7 +127,7 @@ function Clientform() {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log("response", res);
+        // console.log("response", res);
 
         setClients(res.data.clients || []);
       } catch (err) {
@@ -136,14 +138,28 @@ function Clientform() {
   }, [token, formData, selectedTab]);
 
   // filtering client
-  const filteredClients = clients.filter((client) => {
-    const text = searchText.toLowerCase();
-    return (
-      client.name.toLowerCase().includes(text) ||
-      client.email.toLowerCase().includes(text) ||
-      client.phone.includes(text)
-    );
-  });
+  // const filteredClients = clients.filter((client) => {
+  //   const text = searchText.toLowerCase();
+  //   return (
+  //     client.name.toLowerCase().includes(text) ||
+  //     client.email.toLowerCase().includes(text) ||
+  //     client.phone.includes(text)
+  //   );
+  // });
+
+
+
+  const filteredClients = Array.isArray(clients)
+    ? clients.filter((c) => {
+        const text = searchText.toLowerCase();
+        return (
+          c?.name?.toLowerCase().includes(text) ||
+          c?.email?.toLowerCase().includes(text) ||
+          c?.phone?.includes(text)
+        );
+      })
+    : [];
+
 
   //Delete client
 
@@ -184,13 +200,13 @@ function Clientform() {
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditClientData((prev) => ({ ...prev, [name]: value }));
-    console.log(editClientData);
+    // console.log(editClientData);
   };
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const response = await axios.patch(
         `https://client-management-server-ten.vercel.app/client/updateclient/${editClientData._id}`,
         editClientData,
         {
@@ -199,19 +215,23 @@ function Clientform() {
           },
         }
       );
-      console.log("edit response:",response.data);
+     
 
       if (response.data.status === "success") {
         alert("Client updated successfully");
+         console.log("edit response:", response.data);
 
         // Update in local state
         setClients((prev) =>
           prev.map((client) =>
             client._id === editClientData._id
-              ? response.data.updatedClient
+              ? response.data.client
               : client
           )
         );
+
+
+        
 
         setIsEditModalOpen(false);
         setEditClientData(null);
@@ -226,7 +246,7 @@ function Clientform() {
     <>
       <div className="infoWrapper">
         <div className="formContainer">
-          <form className="Form" onSubmit={handleSubmit}>
+          {/* <form className="Form" onSubmit={handleSubmit}>
             <div className="formDiv">
               <h2>ADD USER</h2>
             </div>
@@ -294,42 +314,133 @@ function Clientform() {
             <div className="buttDiv">
               <button type="submit">Submit</button>
             </div>
-          </form>
+          </form> */}
+          {isAddUserModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <button
+                  className="modal-close"
+                  onClick={() => setIsAddUserModalOpen(false)}
+                >
+                  &times;
+                </button>
+
+                <form className="Form" onSubmit={handleSubmit}>
+                  <div className="formDiv">
+                    <h2>ADD USER</h2>
+                  </div>
+
+                  <div className="formDiv">
+                    <label>Name</label>
+                    <input
+                      name="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">{errors.name}</p>
+                    )}
+                  </div>
+
+                  <div className="formDiv">
+                    <label>Phone</label>
+                    <input
+                      name="phone"
+                      type="text"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                    />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm">{errors.phone}</p>
+                    )}
+                  </div>
+
+                  <div className="formDiv">
+                    <label>Email</label>
+                    <input
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">{errors.email}</p>
+                    )}
+                  </div>
+
+                  <div className="formDiv">
+                    <label>Package</label>
+                    <select
+                      name="packageName"
+                      value={formData.packageName}
+                      onChange={handleChange}
+                      required
+                    >
+                      <option value="">Select a package</option>
+                      <option value="Premium">Premium ($1500, 3 months)</option>
+                      <option value="Classic">Classic ($1000, 2 months)</option>
+                      <option value="Local">Local ($700, 1 month)</option>
+                    </select>
+                    {errors.packageName && (
+                      <p className="text-red-500 text-sm">
+                        {errors.packageName}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="buttDiv">
+                    <button type="submit">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
         <div className="displayContainer">
           <div className="displayWrapper">
-            <div
-              className="tabContainer"
-              style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-            >
-              <button
-                className={selectedTab === "all" ? "activeTab" : ""}
-                onClick={() => setSelectedTab("all")}
+            <div className="tab-wrapper">
+              <div className="firstTab">
+                <button onClick={() => setIsAddUserModalOpen(true)}>
+                  Add Client
+                </button>
+              </div>
+              <div
+                className="tabContainer"
+                style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
               >
-                All Users
-              </button>
-              <button
-                className={selectedTab === "active" ? "activeTab" : ""}
-                onClick={() => setSelectedTab("active")}
-              >
-                Active Users
-              </button>
-              <button
-                className={selectedTab === "inactive" ? "activeTab" : ""}
-                onClick={() => setSelectedTab("inactive")}
-              >
-                Inactive Users
-              </button>
-              <div className="searchBox">
-                <input
-                  type="text"
-                  placeholder="Search by name, email, or phone"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                />
+                <button
+                  className={selectedTab === "all" ? "activeTab" : ""}
+                  onClick={() => setSelectedTab("all")}
+                >
+                  All Users
+                </button>
+                <button
+                  className={selectedTab === "active" ? "activeTab" : ""}
+                  onClick={() => setSelectedTab("active")}
+                >
+                  Active Users
+                </button>
+                <button
+                  className={selectedTab === "inactive" ? "activeTab" : ""}
+                  onClick={() => setSelectedTab("inactive")}
+                >
+                  Inactive Users
+                </button>
+                <div className="searchBox">
+                  <input
+                    type="text"
+                    placeholder="Search by name, email, or phone"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                </div>
               </div>
             </div>
-            <div className="displayBox">
+            {/* <div className="displayBox">
               {filteredClients.length === 0 ? (
                 <p>No clients found.</p>
               ) : (
@@ -393,6 +504,60 @@ function Clientform() {
                   ))}
                 </div>
               )}
+            </div> */}
+            <div className="clientTableWrapper">
+              {filteredClients.length === 0 ? (
+                <p>No clients found.</p>
+              ) : (
+                <table className="clientTable">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Package</th>
+                      <th>Admission Date</th>
+                      <th>Expiry Date</th>
+                      <th>Days Remaining</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredClients.map((client, index) => (
+                      <tr
+                        key={client._id}
+                        className={index % 2 === 0 ? "rowLight" : "rowDark"}
+                      >
+                        <td className="clientName">{client.name}</td>
+                        <td>{client.email}</td>
+                        <td>{client.phone}</td>
+                        <td>{client.packageName}</td>
+                        <td>{client.createdAt}</td>
+                        <td>{client.packageStatus.expiryDate}</td>
+                        <td>{client.packageStatus.daysRemaining}</td>
+                        <td>
+                          <span
+                            className={
+                              client.packageStatus.isActive
+                                ? "statusDot green"
+                                : "statusDot red"
+                            }
+                          ></span>
+                        </td>
+                        <td>
+                          <button onClick={() => handleDelete(client._id)}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                          </button>
+                          <button onClick={() => openEditModal(client)}>
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
@@ -405,6 +570,14 @@ function Clientform() {
               <div className="modal-content">
                 <h2>Edit Client</h2>
                 <form onSubmit={handleEditSubmit}>
+                  <label>name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={editClientData.name}
+                    onChange={handleEditChange}
+                  />
+
                   <label>Email</label>
                   <input
                     type="email"

@@ -121,7 +121,7 @@ const Signup = () => {
       <div className="btn-wrap">
         <button
           type="submit"
-          className="auth-button bg-green-600 text-white py-2 px-4 w-full rounded hover:bg-green-700"
+          className="auth-button py-2 px-4 w-full rounded"
         >
           Create Account
         </button>
